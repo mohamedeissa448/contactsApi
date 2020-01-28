@@ -1,5 +1,4 @@
 const express = require("express");
-const path = require("path");
 const morgan = require("morgan");
 const cors = require("cors");
 const mongoose = require("mongoose");
@@ -8,8 +7,12 @@ const contactsRouter = require("./api/routes/contacts.route");
 //initialize app
 const app = express();
 app.use(cors()); //to enable CORS 'cross-origin resource sharing'
-mongoose.connect("mongodb://localhost:27017/task", () => {
-  console.log("connected to DB");
+mongoose.connect("mongodb://localhost:27017/task", error => {
+  if (error) {
+    next(error);
+  } else {
+    console.log("connected to DB");
+  }
 });
 //middle wares
 app.use(morgan("dev"));

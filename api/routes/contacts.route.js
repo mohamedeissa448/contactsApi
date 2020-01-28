@@ -1,6 +1,5 @@
 const express = require("express");
 const router = express.Router();
-const mongoose = require("mongoose");
 const { check, validationResult } = require("express-validator");
 const Contact = require("../models/contact.model");
 const checkAuth = require("../configuration/checkAuth");
@@ -68,7 +67,7 @@ router.post(
                 message: "contact created",
                 data: {
                   email: newContact.email,
-                  relationId: "",
+                  relationId: "", //I didnot understand what relation ID should be
                   accountId: newContact._id,
                   userId: req.body.userId,
                   firstName: newContact.firstName,
@@ -85,8 +84,13 @@ router.post(
 );
 
 router.get("/getList", checkAuth, (req, res, next) => {
-  Contact.find({ userId: req.body.userId })
-    .select("email mobile firstName lastName userId createdAt")
+  Contact.find(
+    { userId: req.body.userId },
+    {
+      updatedAt: 0,
+      __v: 0
+    }
+  )
     .then(contacts => {
       res.status(200).json({
         message: "All user contacts",
@@ -97,10 +101,15 @@ router.get("/getList", checkAuth, (req, res, next) => {
 });
 
 router.get("/getRecentList", checkAuth, (req, res, next) => {
-  Contact.find({ userId: req.body.userId })
+  Contact.find(
+    { userId: req.body.userId },
+    {
+      updatedAt: 0,
+      __v: 0
+    }
+  )
     .sort({ createdAt: -1 })
     .limit(5)
-    .select("email mobile firstName lastName userId createdAt")
     .then(contacts => {
       res.status(200).json({
         message: "last contacts created by the user at most 5 contacts",
