@@ -7,12 +7,8 @@ const contactsRouter = require("./api/routes/contacts.route");
 //initialize app
 const app = express();
 app.use(cors()); //to enable CORS 'cross-origin resource sharing'
-mongoose.connect("mongodb://localhost:27017/task", error => {
-  if (error) {
-    throw new Error(error);
-  } else {
-    console.log("connected to DB");
-  }
+mongoose.connect("mongodb://localhost:27017/task", () => {
+  console.log("connected to DB");
 });
 //middle wares
 app.use(morgan("dev"));
