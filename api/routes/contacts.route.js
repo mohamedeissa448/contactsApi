@@ -83,7 +83,7 @@ router.post(
   }
 );
 
-router.get("/getList", checkAuth, (req, res, next) => {
+router.post("/getList", checkAuth, (req, res, next) => {
   Contact.find(
     { userId: req.body.userId },
     {
@@ -100,7 +100,7 @@ router.get("/getList", checkAuth, (req, res, next) => {
     .catch(err => next(err));
 });
 
-router.get("/getRecentList", checkAuth, (req, res, next) => {
+router.post("/getRecentList", checkAuth, (req, res, next) => {
   Contact.find(
     { userId: req.body.userId },
     {
