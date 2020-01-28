@@ -84,17 +84,29 @@ router.post(
 );
 
 router.post("/getList", checkAuth, (req, res, next) => {
+  //return all contacts belong to the user who requests and their first names starts with a specific character or string provided in request body,
+  //if character is empty string or not provided in request body,it returns all contacts belongs to the user
   Contact.find(
-    { userId: req.body.userId },
+    {
+      userId: req.body.userId,
+      firstName: { $regex: "^" + (req.body.character || "") + ".*" }
+    },
     {
       updatedAt: 0,
       __v: 0
     }
   )
     .then(contacts => {
+      console.log(contacts);
+      // get only results of current page
+      const resPerPage = 5;
+      const currentPageNumber = req.body.pageNum;
+      const start = (currentPageNumber - 1) * resPerPage;
+      const end = currentPageNumber * resPerPage;
+
       res.status(200).json({
         message: "All user contacts",
-        data: contacts
+        data: contacts.slice(start, end)
       });
     })
     .catch(err => next(err));
