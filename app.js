@@ -9,7 +9,7 @@ const app = express();
 app.use(cors()); //to enable CORS 'cross-origin resource sharing'
 mongoose.connect("mongodb://localhost:27017/task", error => {
   if (error) {
-    next(error);
+    throw new Error(error);
   } else {
     console.log("connected to DB");
   }
